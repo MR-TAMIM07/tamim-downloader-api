@@ -5,31 +5,25 @@ const app = express();
 
 app.use(express.json());
 
-const DIR = process.env.HOME + '/downloads';
-if (!fs.existsSync(DIR)) fs.mkdirSync(DIR);
-
 app.get('/', (req, res) => {
-  res.json({
-    name: 'TAMIM Downloader API 👽🔥',
-    status: 'Online',
-    usage: 'POST /download { "url": "video_url" }'
-  });
+  res.json({ name: 'TAMIM Downloader API 👽🔥', status: 'Online' });
 });
 
-app.post('/download', (req, res) => {
-  const { url } = req.body;
+app.get('/alldl', (req, res) => {
+  const { url } = req.query;
   if (!url) return res.status(400).json({ error: 'URL dao!' });
 
-  res.json({ message: 'Download shuru hoye gese! ⏳', url });
-
-  const cmd = `yt-dlp -o "${DIR}/%(title)s.%(ext)s" "${url}"`;
+  const cmd = `yt-dlp --get-url --no-playlist "${url}"`;
   exec(cmd, (err, stdout, stderr) => {
-    if (err) console.log('Error:', stderr);
-    else console.log('Done:', stdout);
+    if (err || !stdout.trim()) {
+      return res.status(500).json({ error: 'Failed', details: stderr });
+    }
+    const links = stdout.trim().split('\n');
+    res.json({ result: links[0], cp: 'Downloaded via TAMIM API 👽' });
   });
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`TAMIM API running on port ${PORT} 👽🚀`);
 });

@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: tamim-downloader-api
+    env: node
+    buildCommand: pip install yt-dlp && npm install
+    startCommand: node index.js

@@ -11,6 +11,11 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "express": "^5.2.1"
+    "@bochilteam/scraper": "^5.0.1",
+    "@xaviabot/fb-downloader": "^1.0.14",
+    "axios": "^1.15.0",
+    "express": "^5.2.1",
+    "fs-extra": "^11.3.4",
+    "play-dl": "^1.9.7"
   }
 }
